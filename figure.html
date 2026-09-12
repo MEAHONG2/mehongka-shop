@@ -187,6 +187,25 @@
     transform: scale(5);
     z-index: 10;
   }
+  .img-wrap {
+    position: relative;
+  }
+  .wish-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background-color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .card h3 {
     margin-bottom: 10px;
   }
@@ -300,7 +319,10 @@
         <div class="product-list">
 
           <div class="card" id="hero">
-            <img class="product-img" src="https://cdn.pixabay.com/photo/2016/03/27/18/32/bokeh-1283481_640.jpg" alt="히어로 피규어">
+            <div class="img-wrap">
+              <img class="product-img" src="https://cdn.pixabay.com/photo/2016/03/27/18/32/bokeh-1283481_640.jpg" alt="히어로 피규어">
+              <button class="wish-btn" onclick="toggleWish(this)">🤍</button>
+            </div>
             <h3>히어로 피규어</h3>
             <div class="old-price">90,000원</div>
             <div class="price">72,000원</div>
@@ -308,7 +330,10 @@
           </div>
 
           <div class="card" id="animal">
-            <img class="product-img" src="https://cdn.pixabay.com/photo/2021/05/27/13/55/trex-6288202_640.jpg" alt="동물 피규어">
+            <div class="img-wrap">
+              <img class="product-img" src="https://cdn.pixabay.com/photo/2021/05/27/13/55/trex-6288202_640.jpg" alt="동물 피규어">
+              <button class="wish-btn" onclick="toggleWish(this)">🤍</button>
+            </div>
             <h3>동물 피규어</h3>
             <div class="old-price">55,000원</div>
             <div class="price">44,000원</div>
@@ -316,7 +341,10 @@
           </div>
 
           <div class="card" id="astro">
-            <img class="product-img" src="https://cdn.pixabay.com/photo/2014/11/17/18/20/lego-535001_640.jpg" alt="우주인 피규어">
+            <div class="img-wrap">
+              <img class="product-img" src="https://cdn.pixabay.com/photo/2014/11/17/18/20/lego-535001_640.jpg" alt="우주인 피규어">
+              <button class="wish-btn" onclick="toggleWish(this)">🤍</button>
+            </div>
             <h3>우주인 피규어</h3>
             <div class="old-price">65,000원</div>
             <div class="price">52,000원</div>
@@ -360,6 +388,11 @@
         alert('검색 결과가 없습니다: ' + keyword);
       }
       return false;
+    }
+
+    // 찜하기 버튼
+    function toggleWish(btn) {
+      btn.textContent = btn.textContent === '🤍' ? '❤️' : '🤍';
     }
   </script>
 

@@ -187,6 +187,25 @@
     transform: scale(5);
     z-index: 10;
   }
+  .img-wrap {
+    position: relative;
+  }
+  .wish-btn {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background-color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .card h3 {
     margin-bottom: 10px;
   }
@@ -300,7 +319,10 @@
         <div class="product-list">
 
           <div class="card" id="car">
-            <img class="product-img" src="https://cdn.pixabay.com/photo/2020/03/02/20/01/rc-model-4896786_640.jpg" alt="고속 RC카">
+            <div class="img-wrap">
+              <img class="product-img" src="https://cdn.pixabay.com/photo/2020/03/02/20/01/rc-model-4896786_640.jpg" alt="고속 RC카">
+              <button class="wish-btn" onclick="toggleWish(this)">🤍</button>
+            </div>
             <h3>고속 RC카</h3>
             <div class="old-price">133,000원</div>
             <div class="price">106,400원</div>
@@ -308,7 +330,10 @@
           </div>
 
           <div class="card" id="drone">
-            <img class="product-img" src="https://cdn.pixabay.com/photo/2018/03/15/13/45/drone-3228281_1280.jpg" alt="미니 드론 RC">
+            <div class="img-wrap">
+              <img class="product-img" src="https://cdn.pixabay.com/photo/2018/03/15/13/45/drone-3228281_1280.jpg" alt="미니 드론 RC">
+              <button class="wish-btn" onclick="toggleWish(this)">🤍</button>
+            </div>
             <h3>미니 드론 RC</h3>
             <div class="old-price">105,000원</div>
             <div class="price">84,000원</div>
@@ -316,7 +341,10 @@
           </div>
 
           <div class="card" id="offroad">
-            <img class="product-img" src="https://cdn.pixabay.com/photo/2020/04/19/13/42/off-road-outlaw-5063678_1280.jpg" alt="오프로드 RC카">
+            <div class="img-wrap">
+              <img class="product-img" src="https://cdn.pixabay.com/photo/2020/04/19/13/42/off-road-outlaw-5063678_1280.jpg" alt="오프로드 RC카">
+              <button class="wish-btn" onclick="toggleWish(this)">🤍</button>
+            </div>
             <h3>오프로드 RC카</h3>
             <div class="old-price">120,000원</div>
             <div class="price">96,000원</div>
@@ -324,7 +352,10 @@
           </div>
 
           <div class="card" id="boat">
-            <img class="product-img" src="https://cdn.pixabay.com/photo/2014/01/14/16/47/model-boat-244863_640.jpg" alt="RC 보트">
+            <div class="img-wrap">
+              <img class="product-img" src="https://cdn.pixabay.com/photo/2014/01/14/16/47/model-boat-244863_640.jpg" alt="RC 보트">
+              <button class="wish-btn" onclick="toggleWish(this)">🤍</button>
+            </div>
             <h3>RC 보트</h3>
             <div class="old-price">95,000원</div>
             <div class="price">76,000원</div>
@@ -368,6 +399,11 @@
         alert('검색 결과가 없습니다: ' + keyword);
       }
       return false;
+    }
+
+    // 찜하기 버튼
+    function toggleWish(btn) {
+      btn.textContent = btn.textContent === '🤍' ? '❤️' : '🤍';
     }
   </script>
 
