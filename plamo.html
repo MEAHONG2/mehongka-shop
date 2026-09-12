@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메홍키덜트샾 - 프라모델</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: sans-serif;
+    color: #222;
+  }
+
+  :root {
+    --orange: #ff7a00;
+    --blue: #0077cc;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background-color: var(--blue);
+    color: white;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  header .logo h1 {
+    font-size: 24px;
+  }
+  header .logo p {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  .top-bar {
+    background-color: #005a99;
+    padding: 8px 30px;
+  }
+
+  .search-box {
+    display: flex;
+  }
+  .search-box input {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px 0 0 6px;
+    width: 200px;
+  }
+  .search-box button {
+    padding: 8px 14px;
+    border: none;
+    background-color: var(--orange);
+    color: white;
+    font-weight: bold;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  nav a:hover {
+    color: var(--orange);
+  }
+
+  nav li {
+    position: relative;
+  }
+  .submenu {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--blue);
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 100px;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+  }
+  nav li:hover .submenu {
+    display: flex;
+  }
+
+  .layout {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .sidebar {
+    width: 220px;
+    padding: 20px;
+    border-right: 2px solid #eee;
+  }
+  .sidebar h3 {
+    color: var(--blue);
+    margin-bottom: 15px;
+  }
+  .sidebar-group {
+    margin-bottom: 20px;
+  }
+  .sidebar-title {
+    font-weight: bold;
+    color: var(--orange);
+    margin-bottom: 8px;
+  }
+  .sidebar ul {
+    list-style: none;
+  }
+  .sidebar ul li a {
+    display: block;
+    padding: 4px 0;
+    color: #444;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  .sidebar ul li a:hover {
+    color: var(--blue);
+    font-weight: bold;
+  }
+  .main-content {
+    flex: 1;
+    min-width: 280px;
+  }
+
+  .products {
+    padding: 50px 20px;
+    text-align: center;
+  }
+  .sale-badge {
+    display: inline-block;
+    background-color: white;
+    color: red;
+    font-weight: bold;
+    padding: 8px 18px;
+    border-radius: 20px;
+    margin: 20px 0;
+  }
+  .sale-strip {
+    background-color: var(--orange);
+    text-align: center;
+    padding: 15px;
+  }
+  .products h2 {
+    color: var(--blue);
+    margin-bottom: 30px;
+    font-size: 26px;
+  }
+  .product-list {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .card {
+    background-color: #ffffff00;
+    border: 2px solid var(--orange);
+    border-radius: 12px;
+    width: 220px;
+    padding: 20px;
+  }
+  .card .product-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  .card .product-img:hover {
+    transform: scale(5);
+    z-index: 10;
+  }
+  .img-wrap {
+    position: relative;
+  }
+  .sold-out {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    transform: rotate(12deg);
+  }
+  .card h3 {
+    margin-bottom: 10px;
+  }
+  .card .old-price {
+    color: #999;
+    text-decoration: line-through;
+    font-size: 14px;
+  }
+  .card .price {
+    color: red;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+  }
+  .card button {
+    margin-top: 15px;
+    background-color: var(--blue);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .card button:hover {
+    opacity: 0.85;
+  }
+
+  footer {
+    background-color: #222222;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+  <!-- 상단 메뉴 바 -->
+  <div class="top-bar">
+    <nav>
+      <ul>
+        <li><a href="index.html">홈</a></li>
+        <li>
+          <a href="#">상품 ▾</a>
+          <ul class="submenu">
+            <li><a href="rc.html">RC</a></li>
+            <li><a href="plamo.html">프라모델</a></li>
+            <li><a href="figure.html">피규어</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- 헤더: 쇼핑몰 이름 + 검색 -->
+  <header>
+    <div class="logo">
+      <h1>메홍키덜트샾이지롱</h1>
+      <p>RC, 프라모델, 피규어를 신나게 즐기는 곳!</p>
+    </div>
+    <form class="search-box" onsubmit="return doSearch(event)">
+      <input id="searchInput" type="text" placeholder="상품을 검색해보세요">
+      <button type="submit">검색</button>
+    </form>
+  </header>
+
+  <div class="layout">
+
+    <!-- 사이드바 카테고리 -->
+    <aside class="sidebar">
+      <h3>카테고리</h3>
+      <div class="sidebar-group">
+        <div class="sidebar-title">🚗 RC</div>
+        <ul>
+          <li><a href="rc.html#car">고속 RC카</a></li>
+          <li><a href="rc.html#drone">미니 드론 RC</a></li>
+          <li><a href="rc.html#offroad">오프로드 RC카</a></li>
+          <li><a href="rc.html#boat">RC 보트</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-title">🤖 프라모델</div>
+        <ul>
+          <li><a href="plamo.html#gundam">건담 프라모델</a></li>
+          <li><a href="plamo.html#jet">전투기 프라모델</a></li>
+          <li><a href="plamo.html#ship">전함 프라모델</a></li>
+          <li><a href="plamo.html#robot">로봇 프라모델</a></li>
+        </ul>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-title">🦸 피규어</div>
+        <ul>
+          <li><a href="figure.html#hero">히어로 피규어</a></li>
+          <li><a href="figure.html#animal">동물 피규어</a></li>
+          <li><a href="figure.html#astro">우주인 피규어</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="main-content">
+
+      <!-- 1주년 기념 할인 안내 -->
+      <div class="sale-strip">
+        <div class="sale-badge">🎉 1주년 기념 전상품 20% 할인 🎉</div>
+      </div>
+
+      <!-- 프라모델 상품 -->
+      <section class="products">
+        <h2>프라모델</h2>
+        <div class="product-list">
+
+          <div class="card" id="gundam">
+            <div class="img-wrap">
+              <img class="product-img" src="https://cdn.pixabay.com/photo/2020/03/17/00/46/ais-gray-4938714_640.jpg" alt="건담 프라모델">
+              <span class="sold-out">품절</span>
+            </div>
+            <h3>건담 프라모델</h3>
+            <div class="old-price">68,000원</div>
+            <div class="price">54,400원</div>
+            <button onclick="alert('건담 프라모델을 장바구니에 담았습니다!')">담기</button>
+          </div>
+
+          <div class="card" id="jet">
+            <img class="product-img" src="https://cdn.pixabay.com/photo/2016/05/25/11/10/aircraft-1414487_640.jpg" alt="전투기 프라모델">
+            <h3>전투기 프라모델</h3>
+            <div class="old-price">57,000원</div>
+            <div class="price">45,600원</div>
+            <button onclick="alert('전투기 프라모델을 장바구니에 담았습니다!')">담기</button>
+          </div>
+
+          <div class="card" id="ship">
+            <img class="product-img" src="https://cdn.pixabay.com/photo/2017/05/30/20/30/ship-model-2358101_1280.jpg" alt="전함 프라모델">
+            <h3>전함 프라모델</h3>
+            <div class="old-price">80,000원</div>
+            <div class="price">64,000원</div>
+            <button onclick="alert('전함 프라모델을 장바구니에 담았습니다!')">담기</button>
+          </div>
+
+          <div class="card" id="robot">
+            <img class="product-img" src="https://cdn.pixabay.com/photo/2022/06/18/06/13/robot-7269249_1280.jpg" alt="로봇 프라모델">
+            <h3>로봇 프라모델</h3>
+            <div class="old-price">72,000원</div>
+            <div class="price">57,600원</div>
+            <button onclick="alert('로봇 프라모델을 장바구니에 담았습니다!')">담기</button>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- 푸터: 연락처 -->
+  <footer>
+    <p>메홍카덜트샾 | 전화: 010-1234-5678 | 이메일: contact@mehongka.com</p>
+    <p>운영시간: 평일 10:00 ~ 19:00</p>
+  </footer>
+
+  <script>
+    const products = [
+      { name: "고속 RC카", url: "rc.html#car" },
+      { name: "미니 드론 RC", url: "rc.html#drone" },
+      { name: "오프로드 RC카", url: "rc.html#offroad" },
+      { name: "RC 보트", url: "rc.html#boat" },
+      { name: "건담 프라모델", url: "plamo.html#gundam" },
+      { name: "전투기 프라모델", url: "plamo.html#jet" },
+      { name: "전함 프라모델", url: "plamo.html#ship" },
+      { name: "로봇 프라모델", url: "plamo.html#robot" },
+      { name: "히어로 피규어", url: "figure.html#hero" },
+      { name: "동물 피규어", url: "figure.html#animal" },
+      { name: "우주인 피규어", url: "figure.html#astro" }
+    ];
+    function doSearch(event) {
+      event.preventDefault();
+      const keyword = document.getElementById('searchInput').value.trim();
+      if (!keyword) return false;
+      const found = products.find(p => p.name.includes(keyword) || keyword.includes(p.name));
+      if (found) {
+        location.href = found.url;
+      } else {
+        alert('검색 결과가 없습니다: ' + keyword);
+      }
+      return false;
+    }
+  </script>
+
+</body>
+</html>
