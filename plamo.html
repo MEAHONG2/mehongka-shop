@@ -425,11 +425,27 @@
       { name: "동물 피규어", url: "figure.html#animal" },
       { name: "우주인 피규어", url: "figure.html#astro" }
     ];
+
+    // 한글 초성 추출 (예: "건담" -> "ㄱㄷ")
+    const CHOSUNG_LIST = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ'];
+    function getChosung(str) {
+      let result = '';
+      for (const ch of str) {
+        const code = ch.charCodeAt(0) - 0xAC00;
+        if (code >= 0 && code <= 11171) {
+          result += CHOSUNG_LIST[Math.floor(code / 588)];
+        } else {
+          result += ch;
+        }
+      }
+      return result;
+    }
+
     function doSearch(event) {
       event.preventDefault();
       const keyword = document.getElementById('searchInput').value.trim();
       if (!keyword) return false;
-      const found = products.find(p => p.name.includes(keyword) || keyword.includes(p.name));
+      const found = products.find(p => p.name.includes(keyword) || keyword.includes(p.name) || getChosung(p.name).includes(keyword));
       if (found) {
         location.href = found.url;
       } else {
@@ -447,7 +463,7 @@
         box.style.display = 'none';
         return;
       }
-      const matches = products.filter(p => p.name.includes(keyword));
+      const matches = products.filter(p => p.name.includes(keyword) || getChosung(p.name).includes(keyword));
       if (matches.length === 0) {
         box.style.display = 'none';
         return;
