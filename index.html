@@ -50,12 +50,35 @@
   /* 검색창 */
   .search-box {
     display: flex;
+    position: relative;
   }
   .search-box input {
     padding: 8px 12px;
     border: none;
     border-radius: 6px 0 0 6px;
     width: 200px;
+  }
+  .search-results {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    z-index: 20;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  .search-results div {
+    padding: 10px 12px;
+    color: #222;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .search-results div:hover {
+    background-color: #f0f0f0;
   }
   .search-box button {
     padding: 8px 14px;
@@ -365,8 +388,9 @@
       <p>어릴 적 그 설렘 그대로, 추억을 다시 만나는 곳</p>
     </div>
     <form class="search-box" onsubmit="return doSearch(event)">
-      <input id="searchInput" type="text" placeholder="상품을 검색해보세요">
+      <input id="searchInput" type="text" placeholder="상품을 검색해보세요" oninput="showSearchResults()" autocomplete="off">
       <button type="submit">검색</button>
+      <div id="searchResults" class="search-results"></div>
     </form>
   </header>
 
@@ -524,6 +548,34 @@
       }
       return false;
     }
+
+    // 실시간 검색 결과 표시
+    function showSearchResults() {
+      const keyword = document.getElementById('searchInput').value.trim();
+      const box = document.getElementById('searchResults');
+      box.innerHTML = '';
+      if (!keyword) {
+        box.style.display = 'none';
+        return;
+      }
+      const matches = products.filter(p => p.name.includes(keyword));
+      if (matches.length === 0) {
+        box.style.display = 'none';
+        return;
+      }
+      matches.forEach(p => {
+        const item = document.createElement('div');
+        item.textContent = p.name;
+        item.onclick = () => location.href = p.url;
+        box.appendChild(item);
+      });
+      box.style.display = 'block';
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.search-box')) {
+        document.getElementById('searchResults').style.display = 'none';
+      }
+    });
 
     // 자동 슬라이드 배너
     const slides = document.querySelectorAll('.slide');
