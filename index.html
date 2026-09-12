@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>메홍키덜트샾</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
 <style>
   /* 전체 기본 설정 */
   * {
@@ -20,17 +22,20 @@
     background-attachment: fixed;
   }
   .layout {
-    background-color: rgba(255, 255, 255, 0.88);
+    background-color: rgba(15, 15, 15, 0.92);
+    color: #eee;
     margin: 20px;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
   }
 
-  /* 색상 변수 (주황 + 파랑) */
+  /* 색상 변수 (주황 + 파랑 + 골드) */
   :root {
     --orange: #ff7a00;
     --blue: #0077cc;
+    --gold: #d4af37;
+    --dark: #111111;
   }
 
   /* 헤더 */
@@ -39,22 +44,27 @@
     justify-content: space-between;
     align-items: center;
     padding: 20px 30px;
-    background-color: var(--blue);
+    background-color: var(--dark);
     color: white;
     flex-wrap: wrap;
     gap: 15px;
+    border-bottom: 1px solid var(--gold);
   }
   header .logo h1 {
-    font-size: 24px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 26px;
+    color: var(--gold);
+    letter-spacing: 1px;
   }
   header .logo p {
     font-size: 13px;
     margin-top: 4px;
+    color: #bbb;
   }
 
   /* 상단 메뉴 바 */
   .top-bar {
-    background-color: #005a99;
+    background-color: #000000;
     padding: 8px 30px;
   }
 
@@ -94,8 +104,8 @@
   .search-box button {
     padding: 8px 14px;
     border: none;
-    background-color: var(--orange);
-    color: white;
+    background-color: var(--gold);
+    color: #111;
     font-weight: bold;
     border-radius: 0 6px 6px 0;
     cursor: pointer;
@@ -112,7 +122,7 @@
     font-weight: bold;
   }
   nav a:hover {
-    color: var(--orange);
+    color: var(--gold);
   }
 
   /* 하부메뉴 (드롭다운) */
@@ -125,7 +135,8 @@
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: var(--blue);
+    background-color: var(--dark);
+    border: 1px solid var(--gold);
     padding: 10px;
     border-radius: 8px;
     min-width: 100px;
@@ -146,10 +157,11 @@
   .sidebar {
     width: 220px;
     padding: 20px;
-    border-right: 2px solid #eee;
+    border-right: 1px solid #333;
   }
   .sidebar h3 {
-    color: var(--blue);
+    font-family: 'Nanum Myeongjo', serif;
+    color: var(--gold);
     margin-bottom: 15px;
   }
   .sidebar-group {
@@ -157,7 +169,7 @@
   }
   .sidebar-title {
     font-weight: bold;
-    color: var(--orange);
+    color: var(--gold);
     margin-bottom: 8px;
   }
   .sidebar ul {
@@ -166,12 +178,12 @@
   .sidebar ul li a {
     display: block;
     padding: 4px 0;
-    color: #444;
+    color: #bbb;
     text-decoration: none;
     font-size: 14px;
   }
   .sidebar ul li a:hover {
-    color: var(--blue);
+    color: var(--gold);
     font-weight: bold;
   }
   .main-content {
@@ -203,7 +215,7 @@
   .slide-overlay {
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.45);
+    background-color: rgba(0, 0, 0, 0.6);
   }
   .slide-text {
     position: relative;
@@ -212,24 +224,27 @@
   }
   .sale-badge {
     display: inline-block;
-    background-color: white;
-    color: red;
+    background-color: var(--gold);
+    color: #111;
     font-weight: bold;
     padding: 8px 18px;
     border-radius: 20px;
     margin-bottom: 20px;
   }
   .slide-text h2 {
-    font-size: 30px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 32px;
     margin-bottom: 12px;
+    color: #fff;
   }
   .slide-text p {
     font-size: 16px;
     margin-bottom: 20px;
+    color: #ddd;
   }
   .slide-text button {
-    background-color: var(--blue);
-    color: white;
+    background-color: var(--gold);
+    color: #111;
     border: none;
     padding: 12px 26px;
     font-size: 15px;
@@ -254,11 +269,11 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.4);
     cursor: pointer;
   }
   .dot.active {
-    background-color: var(--orange);
+    background-color: var(--gold);
   }
 
   /* 공지사항 / 인기상품 박스 */
@@ -271,18 +286,17 @@
   .notice-box, .best-box {
     flex: 1;
     min-width: 240px;
-    border: 2px solid #eee;
+    border: 1px solid #333;
     border-radius: 10px;
     overflow: hidden;
+    background-color: #1a1a1a;
   }
   .notice-box h3, .best-box h3 {
-    background-color: var(--blue);
-    color: white;
+    background-color: var(--gold);
+    color: #111;
     padding: 10px 15px;
     font-size: 16px;
-  }
-  .best-box h3 {
-    background-color: var(--orange);
+    font-family: 'Nanum Myeongjo', serif;
   }
   .notice-box ul {
     list-style: none;
@@ -291,11 +305,13 @@
   .notice-box li {
     padding: 6px 0;
     font-size: 14px;
-    border-bottom: 1px solid #f0f0f0;
+    color: #ccc;
+    border-bottom: 1px solid #333;
   }
   .best-box p {
     padding: 15px;
     font-size: 14px;
+    color: #ccc;
     line-height: 1.8;
   }
 
@@ -305,12 +321,13 @@
     text-align: center;
   }
   .products h2 {
-    color: var(--blue);
+    font-family: 'Nanum Myeongjo', serif;
+    color: var(--gold);
     margin-bottom: 30px;
-    font-size: 26px;
+    font-size: 28px;
   }
   .category-title {
-    color: var(--orange);
+    color: var(--gold);
     font-size: 20px;
     margin: 40px 0 15px;
   }
@@ -321,8 +338,8 @@
     flex-wrap: wrap;
   }
   .card {
-    background-color: #ffffff00;
-    border: 2px solid var(--orange);
+    background-color: #1a1a1a;
+    border: 1px solid var(--gold);
     border-radius: 12px;
     width: 220px;
     padding: 20px;
@@ -332,32 +349,34 @@
     margin-bottom: 15px;
   }
   .card h3 {
+    color: #fff;
     margin-bottom: 10px;
   }
   .card p {
     font-size: 13px;
-    color: #555;
+    color: #aaa;
     margin-bottom: 15px;
   }
   .card .old-price {
-    color: #999;
+    color: #888;
     text-decoration: line-through;
     font-size: 14px;
   }
   .card .price {
-    color: var(--orange);
+    color: var(--gold);
     font-size: 20px;
     font-weight: bold;
     margin-top: 5px;
   }
   .card button {
     margin-top: 15px;
-    background-color: var(--blue);
-    color: white;
+    background-color: var(--gold);
+    color: #111;
     border: none;
     padding: 10px 16px;
     border-radius: 6px;
     cursor: pointer;
+    font-weight: bold;
   }
   .card button:hover {
     opacity: 0.85;
@@ -365,11 +384,12 @@
 
   /* 푸터 */
   footer {
-    background-color: #222222;
-    color: white;
+    background-color: #000000;
+    color: #ccc;
     text-align: center;
     padding: 25px;
     font-size: 14px;
+    border-top: 1px solid var(--gold);
   }
 </style>
 </head>
