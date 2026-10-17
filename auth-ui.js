@@ -19,11 +19,19 @@
     if (el) el.innerHTML = '';
   }
 
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
   function renderLoggedIn(user) {
     var el = document.getElementById('authStatus');
     if (!el) return;
+    var name = user.user_metadata && user.user_metadata.name;
+    var label = name ? (name + '님') : user.email;
     el.innerHTML =
-      '<span class="auth-email" title="' + user.email + '">' + user.email + '</span>' +
+      '<span class="auth-email" title="' + escapeHtml(user.email) + '">' + escapeHtml(label) + '</span>' +
       '<button class="auth-logout-btn" onclick="handleLogout()">로그아웃</button>';
   }
 
