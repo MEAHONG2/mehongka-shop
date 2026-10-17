@@ -455,7 +455,7 @@
         <button type="submit">검색</button>
         <div id="searchResults" class="search-results"></div>
       </form>
-      <div class="cart-icon" onclick="viewCart()" title="장바구니">
+      <div class="cart-icon" onclick="openCart()" title="장바구니">
         🛒
         <span id="cartCount" class="cart-count">0</span>
       </div>
@@ -590,25 +590,8 @@
     <p>운영시간: 평일 10:00 ~ 19:00</p>
   </footer>
 
+  <script src="cart.js"></script>
   <script>
-    // 장바구니 수량 (localStorage로 모든 페이지에서 공유)
-    function getCartCount() {
-      return parseInt(localStorage.getItem('cartCount') || '0', 10);
-    }
-    function updateCartBadge() {
-      const el = document.getElementById('cartCount');
-      if (el) el.textContent = getCartCount();
-    }
-    function addToCart(name) {
-      localStorage.setItem('cartCount', getCartCount() + 1);
-      updateCartBadge();
-      alert(name + '를 장바구니에 담았습니다!');
-    }
-    function viewCart() {
-      alert('현재 장바구니에 담긴 상품 수: ' + getCartCount() + '개');
-    }
-    updateCartBadge();
-
     // 검색 기능
     const products = [
       { name: "고속 RC카", url: "rc.html#car" },
