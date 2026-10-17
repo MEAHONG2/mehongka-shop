@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메홍키덜트샾 - 장바구니</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: sans-serif;
+    color: #eee;
+    background-color: #0a0a0a;
+  }
+
+  :root {
+    --gold: #d4af37;
+    --dark: #111111;
+  }
+
+  /* 상단 메뉴 바 + 헤더 (다른 페이지와 동일) */
+  .top-bar {
+    background-color: #000000;
+    padding: 8px 30px;
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  nav a:hover {
+    color: var(--gold);
+  }
+  nav li {
+    position: relative;
+  }
+  .submenu {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--dark);
+    border: 1px solid var(--gold);
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 100px;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+  }
+  nav li:hover .submenu {
+    display: flex;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background-color: var(--dark);
+    color: white;
+    flex-wrap: wrap;
+    gap: 15px;
+    border-bottom: 1px solid var(--gold);
+  }
+  header .logo h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 26px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  header .logo p {
+    font-size: 13px;
+    margin-top: 4px;
+    color: #bbb;
+  }
+  #authStatus {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* 장바구니 본문 */
+  .cart-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 20px 70px;
+  }
+
+  .steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  .step {
+    text-align: center;
+    color: #666;
+  }
+  .step .num {
+    font-size: 26px;
+    font-weight: 800;
+  }
+  .step .label {
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .step.active {
+    color: var(--gold);
+  }
+  .step-arrow {
+    color: #444;
+    font-size: 20px;
+  }
+
+  .cart-title {
+    font-family: 'Nanum Myeongjo', serif;
+    color: var(--gold);
+    font-size: 24px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cart-table-wrap {
+    overflow-x: auto;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+  }
+  table.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 640px;
+  }
+  .cart-table th {
+    background-color: #151515;
+    color: var(--gold);
+    font-size: 13px;
+    padding: 14px 10px;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .cart-table td {
+    text-align: center;
+    padding: 16px 10px;
+    border-bottom: 1px solid #202020;
+    font-size: 14px;
+  }
+  .cart-table tr:last-child td {
+    border-bottom: none;
+  }
+  .cart-table .prod-name {
+    text-align: left;
+    font-weight: bold;
+    color: #fff;
+  }
+  .qty-control {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .qty-btn {
+    width: 26px;
+    height: 26px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background: #0f0f0f;
+    color: var(--gold);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .qty-btn:hover {
+    border-color: var(--gold);
+  }
+  .qty-num {
+    min-width: 20px;
+    display: inline-block;
+  }
+  .cart-table .sum {
+    color: var(--gold);
+    font-weight: bold;
+  }
+  .remove-btn {
+    background: none;
+    border: 1px solid #555;
+    color: #ccc;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .remove-btn:hover {
+    border-color: #e23b3b;
+    color: #e23b3b;
+  }
+
+  .cart-empty {
+    text-align: center;
+    color: #888;
+    padding: 70px 20px;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+  }
+  .cart-empty p {
+    margin-bottom: 20px;
+    font-size: 15px;
+  }
+
+  .clear-row {
+    text-align: center;
+    margin: 20px 0;
+    color: #999;
+    font-size: 13px;
+  }
+  .clear-btn {
+    margin-top: 10px;
+    background: none;
+    border: 1px solid #555;
+    color: #ccc;
+    padding: 9px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+  .clear-btn:hover {
+    border-color: #e23b3b;
+    color: #e23b3b;
+  }
+
+  .summary-line {
+    text-align: center;
+    margin: 30px 0 10px;
+    font-size: 15px;
+    color: #ddd;
+  }
+  .summary-line strong {
+    color: var(--gold);
+  }
+  .summary-detail {
+    max-width: 320px;
+    margin: 0 auto 30px;
+    font-size: 14px;
+    color: #ccc;
+  }
+  .summary-detail div {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #222;
+  }
+  .summary-detail .grand {
+    font-weight: bold;
+    color: var(--gold);
+    font-size: 17px;
+    border-bottom: none;
+    border-top: 1px dashed #444;
+    margin-top: 4px;
+    padding-top: 12px;
+  }
+
+  .action-row {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .action-row button {
+    padding: 14px 40px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid var(--gold);
+  }
+  .btn-order {
+    background-color: var(--gold);
+    color: #111;
+  }
+  .btn-order:hover {
+    opacity: 0.88;
+  }
+  .btn-continue {
+    background: none;
+    color: var(--gold);
+  }
+  .btn-continue:hover {
+    background-color: #1a1a1a;
+  }
+
+  footer {
+    background-color: #000000;
+    color: #ccc;
+    text-align: center;
+    padding: 25px;
+    font-size: 14px;
+    border-top: 1px solid var(--gold);
+  }
+</style>
+</head>
+<body>
+
+  <!-- 상단 메뉴 바 -->
+  <div class="top-bar">
+    <nav>
+      <ul>
+        <li><a href="index.html">홈</a></li>
+        <li>
+          <a href="#">상품 ▾</a>
+          <ul class="submenu">
+            <li><a href="rc.html">RC</a></li>
+            <li><a href="plamo.html">프라모델</a></li>
+            <li><a href="figure.html">피규어</a></li>
+          </ul>
+        </li>
+        <li><a href="login.html">로그인</a></li>
+        <li><a href="admin.html">관리자</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- 헤더 -->
+  <header>
+    <div class="logo">
+      <h1>메홍키덜트샾이지롱</h1>
+      <p>어릴 적 그 설렘 그대로, 추억을 다시 만나는 곳</p>
+    </div>
+    <div id="authStatus"></div>
+  </header>
+
+  <div class="cart-wrap">
+
+    <!-- 단계 표시 -->
+    <div class="steps">
+      <div class="step active">
+        <div class="num">01</div>
+        <div class="label">장바구니 상품확인</div>
+      </div>
+      <div class="step-arrow">›</div>
+      <div class="step">
+        <div class="num">02</div>
+        <div class="label">주문서작성</div>
+      </div>
+      <div class="step-arrow">›</div>
+      <div class="step">
+        <div class="num">03</div>
+        <div class="label">주문서확인</div>
+      </div>
+    </div>
+
+    <h2 class="cart-title">🛒 장바구니 상품확인</h2>
+
+    <div id="cartContent"></div>
+
+  </div>
+
+  <footer>
+    <p>메홍카덜트샾 | 전화: 010-1234-5678 | 이메일: contact@mehongka.com</p>
+    <p>운영시간: 평일 10:00 ~ 19:00</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="auth-ui.js"></script>
+  <script src="cart.js"></script>
+  <script>
+    function renderCartPage() {
+      const cart = getCart();
+      const content = document.getElementById('cartContent');
+
+      if (cart.length === 0) {
+        content.innerHTML =
+          '<div class="cart-empty">' +
+          '<p>장바구니가 비어 있습니다.</p>' +
+          '<button class="clear-btn" onclick="location.href=\'index.html\'" style="color:#d4af37;border-color:#d4af37;">쇼핑하러 가기</button>' +
+          '</div>';
+        return;
+      }
+
+      const rows = cart.map((item, idx) => {
+        const sum = item.price * item.qty;
+        return (
+          '<tr>' +
+          '<td>' + (idx + 1) + '</td>' +
+          '<td class="prod-name">' + item.name + '</td>' +
+          '<td>' + formatWon(item.price) + '</td>' +
+          '<td>' +
+          '<div class="qty-control">' +
+          '<button class="qty-btn" onclick="changeQty(\'' + item.name + '\', -1)">−</button>' +
+          '<span class="qty-num">' + item.qty + '</span>' +
+          '<button class="qty-btn" onclick="changeQty(\'' + item.name + '\', 1)">+</button>' +
+          '</div>' +
+          '</td>' +
+          '<td class="sum">' + formatWon(sum) + '</td>' +
+          '<td><button class="remove-btn" onclick="removeFromCart(\'' + item.name + '\')" title="삭제">✕</button></td>' +
+          '</tr>'
+        );
+      }).join('');
+
+      const productTotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      const shipping = productTotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+      const grandTotal = productTotal + shipping;
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+
+      content.innerHTML =
+        '<div class="cart-table-wrap">' +
+        '<table class="cart-table">' +
+        '<thead><tr><th>번호</th><th>상품명</th><th>가격</th><th>수량</th><th>합계</th><th>취소</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+        '</table>' +
+        '</div>' +
+        '<div class="clear-row">' +
+        '장바구니의 상품을 전체 삭제하시려면 아래 버튼을 눌러주세요.<br>' +
+        '<button class="clear-btn" onclick="if(confirm(\'장바구니를 비우시겠습니까?\')) clearCart()">장바구니 전체삭제</button>' +
+        '</div>' +
+        '<p class="summary-line">현재 장바구니에 담긴 상품은 총 <strong>' + totalCount + '건</strong>이며, 상품의 총 합계는 <strong>' + formatWon(productTotal) + '</strong> 입니다.</p>' +
+        '<div class="summary-detail">' +
+        '<div><span>상품 합계</span><span>' + formatWon(productTotal) + '</span></div>' +
+        '<div><span>배송비</span><span>' + (shipping === 0 ? '무료' : formatWon(shipping)) + '</span></div>' +
+        '<div class="grand"><span>총 결제금액</span><span>' + formatWon(grandTotal) + '</span></div>' +
+        '</div>' +
+        '<div class="action-row">' +
+        '<button class="btn-order" onclick="alert(\'주문 시스템은 준비중입니다!\')">주문하기</button>' +
+        '<button class="btn-continue" onclick="location.href=\'index.html\'">계속쇼핑하기</button>' +
+        '</div>';
+    }
+
+    window.onCartChange = renderCartPage;
+    renderCartPage();
+  </script>
+
+</body>
+</html>
