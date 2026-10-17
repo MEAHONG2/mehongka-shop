@@ -53,6 +53,28 @@
     container.innerHTML = list.map(productCardHtml).join('');
   };
 
+  // 카테고리별 대표 상품(정렬순서가 가장 앞선 상품) 1개씩을 "인기상품"으로 보여준다.
+  window.renderPopularProducts = async function (containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const all = await getAllProducts();
+    if (all.length === 0) {
+      container.textContent = '상품 정보를 불러오지 못했습니다.';
+      return;
+    }
+    const emojiMap = { rc: '🚗', plamo: '🤖', figure: '🦸' };
+    const bestByCategory = {};
+    all.forEach(function (p) {
+      if (!bestByCategory[p.category] || p.sort_order < bestByCategory[p.category].sort_order) {
+        bestByCategory[p.category] = p;
+      }
+    });
+    const picks = Object.keys(bestByCategory).map(function (cat) { return bestByCategory[cat]; });
+    container.innerHTML = picks.map(function (p) {
+      return (emojiMap[p.category] || '🛒') + ' ' + p.name + ' - ' + p.price.toLocaleString() + '원';
+    }).join('<br>');
+  };
+
   window.getAllProducts = getAllProducts;
   window.productUrl = productUrl;
 })();

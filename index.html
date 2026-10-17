@@ -546,11 +546,7 @@
         </div>
         <div class="best-box">
           <h3>🔥 인기상품</h3>
-          <p>
-            🤖 건담 프라모델 - 54,400원<br>
-            🚗 고속 RC카 - 106,400원<br>
-            🦸 히어로 피규어 - 72,000원
-          </p>
+          <p id="popularProducts">상품을 불러오는 중...</p>
         </div>
       </section>
 
@@ -682,6 +678,9 @@
     setInterval(() => {
       showSlide((currentSlide + 1) % slides.length);
     }, 3000);
+
+    // Supabase에서 인기상품(카테고리별 대표 상품)을 불러와 표시
+    renderPopularProducts('popularProducts');
   </script>
 
 </body>
