@@ -71,6 +71,14 @@
   .done-wrap .check { font-size:60px; margin-bottom:16px; }
   .done-wrap h2 { font-family:'Nanum Myeongjo', serif; color:var(--gold); font-size:26px; margin-bottom:10px; }
   .done-wrap p { color:#ccc; margin-bottom:6px; }
+  .see-you-again {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--gold);
+    margin: 34px 0 10px;
+    text-shadow: 0 0 24px rgba(255,30,30,.4);
+  }
   .done-id { color:#888; font-size:13px; margin-bottom:28px; }
   .done-actions { display:flex; justify-content:center; gap:12px; margin-top:20px; flex-wrap:wrap; }
   .done-actions button { padding:12px 28px; border-radius:8px; font-weight:bold; cursor:pointer; border:1px solid var(--gold); background:var(--gold); color:#111; }
@@ -90,6 +98,7 @@
             <li><a href="rc.html">RC</a></li>
             <li><a href="plamo.html">프라모델</a></li>
             <li><a href="figure.html">피규어</a></li>
+            <li><a href="lemans.html">르망24</a></li>
           </ul>
         </li>
         <li><a href="login.html" id="navAuthLink">로그인</a></li>
@@ -272,6 +281,7 @@
         '<p>' + escapeHtml(payload.recipient_name) + '님께 ' + escapeHtml(payload.address) + ' 주소로 배송해드릴게요.</p>' +
         '<p>총 결제금액: <strong style="color:#ff1e1e;">' + formatWon(payload.grand_total) + '</strong></p>' +
         '<div class="done-id">주문번호 ' + orderNo + ' · 연락처 ' + escapeHtml(payload.phone) + '</div>' +
+        '<div class="see-you-again">다음 시간에 다시오세요 🙏</div>' +
         '<div class="done-actions">' +
         '<button onclick="location.href=\'index.html\'">쇼핑 계속하기</button>' +
         '</div>' +
