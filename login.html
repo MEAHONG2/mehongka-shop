@@ -232,6 +232,27 @@
   </footer>
 
   <script>
+    // Supabase가 돌려주는 영어 오류 메시지를 사용자가 이해할 수 있는 한글 안내로 변환
+    function translateAuthError(error) {
+      const msg = (error && error.message) || '';
+      if (/invalid login credentials/i.test(msg)) {
+        return '이메일 또는 비밀번호가 올바르지 않습니다. 다시 확인해주세요.';
+      }
+      if (/email not confirmed/i.test(msg)) {
+        return '이메일 인증이 아직 완료되지 않았습니다. 가입 시 받으신 인증 메일의 링크를 클릭한 뒤 다시 시도해주세요.';
+      }
+      if (/too many requests|rate limit/i.test(msg)) {
+        return '로그인 시도가 너무 많습니다. 잠시 후 다시 시도해주세요.';
+      }
+      if (/user not found/i.test(msg)) {
+        return '가입되지 않은 이메일입니다. 이메일 주소를 다시 확인해주세요.';
+      }
+      if (/network|fetch/i.test(msg)) {
+        return '네트워크 연결을 확인한 뒤 다시 시도해주세요.';
+      }
+      return '로그인에 실패했습니다. 이메일과 비밀번호를 다시 확인해주세요.';
+    }
+
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('li_email').value.trim();
@@ -247,7 +268,7 @@
       btn.disabled = false;
 
       if (error) {
-        msg.textContent = '로그인 중 오류: ' + error.message;
+        msg.textContent = translateAuthError(error);
         msg.classList.add('error');
         return false;
       }
