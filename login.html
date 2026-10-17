@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메홍키덜트샾 - 로그인</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: sans-serif;
+    color: #eee;
+    background-color: #0a0a0a;
+  }
+
+  :root {
+    --gold: #d4af37;
+    --dark: #111111;
+  }
+
+  .top-bar {
+    background-color: #000000;
+    padding: 8px 30px;
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  nav a:hover {
+    color: var(--gold);
+  }
+  nav li {
+    position: relative;
+  }
+  .submenu {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--dark);
+    border: 1px solid var(--gold);
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 100px;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+  }
+  nav li:hover .submenu {
+    display: flex;
+  }
+
+  header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 30px;
+    background-color: var(--dark);
+    border-bottom: 1px solid var(--gold);
+  }
+  header .logo h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 26px;
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-align: center;
+  }
+  header .logo p {
+    font-size: 13px;
+    margin-top: 4px;
+    color: #bbb;
+    text-align: center;
+  }
+
+  .auth-wrap {
+    max-width: 420px;
+    margin: 50px auto;
+    padding: 0 20px 60px;
+  }
+  .auth-panel {
+    background-color: #1a1a1a;
+    border: 1px solid var(--gold);
+    border-radius: 14px;
+    padding: 32px 28px;
+  }
+  .auth-panel h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    color: var(--gold);
+    margin-bottom: 22px;
+    text-align: center;
+    font-size: 23px;
+  }
+  .field {
+    margin-bottom: 16px;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: #bbb;
+    margin-bottom: 6px;
+  }
+  .field input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background-color: #0f0f0f;
+    color: #eee;
+    font-size: 14px;
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+  .auth-btn {
+    width: 100%;
+    background-color: var(--gold);
+    color: #111;
+    border: none;
+    padding: 12px;
+    border-radius: 7px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .auth-btn:hover {
+    opacity: 0.85;
+  }
+  .auth-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .auth-msg {
+    margin-top: 14px;
+    font-size: 13px;
+    text-align: center;
+    min-height: 16px;
+  }
+  .auth-msg.error {
+    color: #e23b3b;
+  }
+  .auth-msg.success {
+    color: #4caf50;
+  }
+  .auth-switch {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #999;
+  }
+  .auth-switch a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  footer {
+    background-color: #000000;
+    color: #ccc;
+    text-align: center;
+    padding: 25px;
+    font-size: 14px;
+    border-top: 1px solid var(--gold);
+  }
+</style>
+</head>
+<body>
+
+  <!-- 상단 메뉴 바 -->
+  <div class="top-bar">
+    <nav>
+      <ul>
+        <li><a href="index.html">홈</a></li>
+        <li>
+          <a href="#">상품 ▾</a>
+          <ul class="submenu">
+            <li><a href="rc.html">RC</a></li>
+            <li><a href="plamo.html">프라모델</a></li>
+            <li><a href="figure.html">피규어</a></li>
+          </ul>
+        </li>
+        <li><a href="login.html">로그인</a></li>
+        <li><a href="admin.html">관리자</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <header>
+    <div class="logo">
+      <h1>메홍키덜트샾이지롱</h1>
+      <p>어릴 적 그 설렘 그대로, 추억을 다시 만나는 곳</p>
+    </div>
+  </header>
+
+  <div class="auth-wrap">
+    <div class="auth-panel">
+      <h2>로그인</h2>
+      <form id="loginForm" onsubmit="return handleLogin(event)">
+        <div class="field">
+          <label for="li_email">이메일</label>
+          <input type="email" id="li_email" placeholder="example@email.com" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="li_password">비밀번호</label>
+          <input type="password" id="li_password" placeholder="비밀번호" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="auth-btn" id="loginBtn">로그인</button>
+      </form>
+      <div id="authMsg" class="auth-msg"></div>
+      <div class="auth-switch">아직 계정이 없으신가요? <a href="signup.html">회원가입</a></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>메홍카덜트샾 | 전화: 010-1234-5678 | 이메일: contact@mehongka.com</p>
+    <p>운영시간: 평일 10:00 ~ 19:00</p>
+  </footer>
+
+  <script>
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('li_email').value.trim();
+      const password = document.getElementById('li_password').value;
+      const msg = document.getElementById('authMsg');
+      const btn = document.getElementById('loginBtn');
+
+      msg.textContent = '';
+      msg.className = 'auth-msg';
+      btn.disabled = true;
+
+      const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+      btn.disabled = false;
+
+      if (error) {
+        msg.textContent = '로그인 중 오류: ' + error.message;
+        msg.classList.add('error');
+        return false;
+      }
+
+      msg.textContent = '로그인되었습니다! 메인으로 이동합니다.';
+      msg.classList.add('success');
+      setTimeout(function () { location.href = 'index.html'; }, 800);
+      return false;
+    }
+  </script>
+
+</body>
+</html>
