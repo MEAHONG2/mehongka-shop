@@ -319,6 +319,106 @@
     opacity: 0.85;
   }
 
+  /* 마그마 레이싱 히어로 배너 */
+  .magma-hero {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 50px 20px 10px;
+    background: radial-gradient(ellipse at center 70%, rgba(255,69,0,0.12), transparent 70%);
+  }
+  .magma-grid-lines {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image: repeating-linear-gradient(90deg, #fff 0 1px, transparent 1px 70px);
+    pointer-events: none;
+  }
+  .magma-tag {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: 1px;
+    color: #ff6a1a;
+    border: 1px solid rgba(255,69,0,0.5);
+    background: rgba(255,69,0,0.08);
+    padding: 6px 16px;
+    border-radius: 20px;
+  }
+  .magma-title {
+    position: relative;
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: italic;
+    font-weight: 800;
+    font-size: 44px;
+    margin: 16px 0 8px;
+    background: linear-gradient(135deg, #ff6a1a 0%, #ff3300 45%, #8b0000 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
+  }
+  .magma-sub {
+    position: relative;
+    color: #999;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  .magma-car {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    height: auto;
+    margin: 10px auto -10px;
+    display: block;
+  }
+  .two-line-divider {
+    position: relative;
+    max-width: 700px;
+    height: 6px;
+    margin: 20px auto 0;
+    background:
+      linear-gradient(90deg, transparent, #ff4500 20%, #ff4500 80%, transparent) 0 0/100% 2px no-repeat,
+      linear-gradient(90deg, transparent, #8b0000 20%, #8b0000 80%, transparent) 0 4px/100% 2px no-repeat;
+    filter: drop-shadow(0 0 6px rgba(255,69,0,.5));
+  }
+
+  /* 상품 카드 레이싱 배지 (Two-Line Lighting 하단 포함) */
+  .race-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 2;
+    transform: skewX(-8deg);
+    background: linear-gradient(135deg, #ff4500, #8b0000);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    font-style: italic;
+    letter-spacing: .5px;
+    padding: 3px 9px;
+    border-radius: 2px;
+  }
+  .card.magma-card {
+    padding-bottom: 0;
+    overflow: hidden;
+  }
+  .card.magma-card .card-inner {
+    padding-bottom: 20px;
+  }
+  .magma-card-divider {
+    height: 6px;
+    margin-top: 14px;
+    background:
+      linear-gradient(90deg, transparent, #ff4500 15%, #ff4500 85%, transparent) 0 0/100% 2px no-repeat,
+      linear-gradient(90deg, transparent, #8b0000 15%, #8b0000 85%, transparent) 0 4px/100% 2px no-repeat;
+    filter: drop-shadow(0 0 4px rgba(255,69,0,.5));
+  }
+
   /* 이미지 출처 크레딧 */
   .credits {
     max-width: 860px;
@@ -441,6 +541,56 @@
       <div class="sale-strip">
         <div class="sale-badge">🎉 1주년 기념 전상품 20% 할인 🎉</div>
       </div>
+
+      <!-- 마그마 레이싱 히어로 배너 -->
+      <section class="magma-hero">
+        <div class="magma-grid-lines"></div>
+        <span class="magma-tag">🏁 GENESIS MAGMA RACING · LE MANS 24H</span>
+        <h1 class="magma-title">HYPERCAR SPIRIT</h1>
+        <p class="magma-sub">르망 24시의 속도와 열기를 그대로, 전설의 머신들을 프라모델로 만나보세요</p>
+        <svg class="magma-car" viewBox="0 0 900 320" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ff6a1a"/>
+              <stop offset="45%" stop-color="#ff3300"/>
+              <stop offset="100%" stop-color="#8b0000"/>
+            </linearGradient>
+            <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff4500" stop-opacity="0.4"/>
+              <stop offset="100%" stop-color="#ff4500" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="glassGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3a3a3a"/>
+              <stop offset="100%" stop-color="#111111"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="450" cy="268" rx="400" ry="22" fill="url(#shadowGrad)"/>
+          <ellipse cx="450" cy="268" rx="340" ry="8" fill="#000" opacity="0.6"/>
+          <rect x="700" y="96" width="6" height="56" fill="#111"/>
+          <rect x="742" y="96" width="6" height="56" fill="#111"/>
+          <rect x="690" y="86" width="68" height="14" rx="3" fill="#161616" stroke="#ff4500" stroke-width="2"/>
+          <path d="M60,222 C70,208 95,196 128,190 C150,186 170,178 200,168 C230,158 250,138 275,122
+                   C300,106 335,100 380,98 C420,96 450,97 478,104 C505,111 520,126 535,142
+                   C552,160 575,172 605,180 C645,190 690,196 725,206 C745,212 758,216 762,224
+                   L762,228 L98,228 C78,228 64,226 60,222 Z"
+                fill="url(#bodyGrad)" stroke="#8b0000" stroke-width="1.5"/>
+          <path d="M285,120 C310,104 345,98 382,97 C415,96 445,98 468,104
+                   C455,112 430,116 400,117 C360,118 320,120 285,120 Z" fill="url(#glassGrad)" opacity="0.92"/>
+          <path d="M520,150 L600,168 L612,186 L560,192 L525,178 Z" fill="#0a0a0a" opacity="0.75"/>
+          <rect x="66" y="196" width="46" height="6" rx="3" fill="#ffe08a"/>
+          <rect x="66" y="196" width="46" height="6" rx="3" fill="#fff" opacity="0.5"/>
+          <circle cx="392" cy="150" r="26" fill="#111" stroke="#ff4500" stroke-width="3"/>
+          <text x="392" y="158" text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" font-size="22" fill="#fff">24</text>
+          <path d="M95,214 C300,222 560,222 745,210" stroke="#ffd34d" stroke-width="3" fill="none" opacity="0.85"/>
+          <g><circle cx="188" cy="226" r="40" fill="#0a0a0a" stroke="#222" stroke-width="2"/>
+             <circle cx="188" cy="226" r="21" fill="#1c1c1c" stroke="#ff4500" stroke-width="2"/>
+             <circle cx="188" cy="226" r="6" fill="#555"/></g>
+          <g><circle cx="648" cy="226" r="40" fill="#0a0a0a" stroke="#222" stroke-width="2"/>
+             <circle cx="648" cy="226" r="21" fill="#1c1c1c" stroke="#ff4500" stroke-width="2"/>
+             <circle cx="648" cy="226" r="6" fill="#555"/></g>
+        </svg>
+        <div class="two-line-divider"></div>
+      </section>
 
       <!-- 르망24 레전드 프라모델 (Supabase products 테이블에서 불러와 렌더링) -->
       <section class="products">

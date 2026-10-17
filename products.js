@@ -24,10 +24,19 @@
     return p.category + '.html#' + p.slug;
   }
 
+  // 르망24 상품은 제네시스 마그마 레이싱 테마 배지를 붙인다.
+  function raceBadgeFor(p) {
+    if (p.category !== 'lemans') return '';
+    const label = p.slug.indexOf('genesis') === 0 ? 'MAGMA ED.' : 'RACE READY';
+    return '<span class="race-badge">' + label + '</span>';
+  }
+
   function productCardHtml(p) {
+    const isLemans = p.category === 'lemans';
     return (
-      '<div class="card" id="' + p.slug + '">' +
+      '<div class="card' + (isLemans ? ' magma-card' : '') + '" id="' + p.slug + '">' +
       '<div class="img-wrap">' +
+      raceBadgeFor(p) +
       '<img class="product-img" src="' + p.image_url + '" alt="' + p.name + '">' +
       (p.sold_out ? '<span class="sold-out">품절</span>' : '') +
       '<button class="wish-btn" onclick="toggleWish(this)">🤍</button>' +
@@ -36,6 +45,7 @@
       '<div class="old-price">' + p.old_price.toLocaleString() + '원</div>' +
       '<div class="price">' + p.price.toLocaleString() + '원</div>' +
       '<button onclick="addToCart(\'' + p.name.replace(/'/g, "\\'") + '\', ' + p.price + ')">담기</button>' +
+      (isLemans ? '<div class="magma-card-divider"></div>' : '') +
       '</div>'
     );
   }
