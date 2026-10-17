@@ -379,8 +379,8 @@
   <script src="auth-ui.js"></script>
   <script src="cart.js"></script>
   <script>
-    function renderCartPage() {
-      const cart = getCart();
+    async function renderCartPage() {
+      const cart = await getCart();
       const content = document.getElementById('cartContent');
 
       if (cart.length === 0) {
