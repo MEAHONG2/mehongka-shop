@@ -34,13 +34,17 @@
   .cart .badge { position:absolute; top:-6px; right:-10px; background:var(--red); color:#fff; font-size:10px; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
 
   .hero {
-    padding:80px 40px; text-align:center; position:relative;
-    background: linear-gradient(180deg, #0d0d0d 0%, #000 100%);
+    padding:110px 40px; text-align:center; position:relative;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.75) 55%, #000 100%),
+      url('https://cdn.pixabay.com/photo/2020/11/09/01/19/car-5725329_1280.jpg');
+    background-size: cover;
+    background-position: center 35%;
   }
   .hero .stripe { width:100px; height:11px; background:var(--red); margin:0 auto 24px; transform:skewX(-20deg); box-shadow:0 0 18px rgba(255,30,30,.5); }
-  .hero h2 { font-size:46px; font-weight:900; font-style:italic; letter-spacing:-1px; margin-bottom:14px; }
+  .hero h2 { font-size:46px; font-weight:900; font-style:italic; letter-spacing:-1px; margin-bottom:14px; text-shadow:0 2px 20px rgba(0,0,0,.8); }
   .hero h2 em { color:var(--red); font-style:italic; }
-  .hero p { color:#aaa; font-size:15px; margin-bottom:28px; }
+  .hero p { color:#ddd; font-size:15px; margin-bottom:28px; text-shadow:0 2px 10px rgba(0,0,0,.8); }
   .hero button {
     background:var(--red); color:#fff; border:3px solid #ff5c5c; padding:15px 38px;
     font-weight:800; font-size:14px; letter-spacing:1px; cursor:pointer;
