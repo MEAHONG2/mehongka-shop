@@ -111,6 +111,36 @@
     cursor: pointer;
   }
 
+  /* 헤더 우측: 검색창 + 장바구니 아이콘 */
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .cart-icon {
+    position: relative;
+    font-size: 26px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #e23b3b;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+  }
+
   nav ul {
     list-style: none;
     display: flex;
@@ -408,6 +438,7 @@
             <li><a href="figure.html">피규어</a></li>
           </ul>
         </li>
+        <li><a href="admin.html">관리자</a></li>
       </ul>
     </nav>
   </div>
@@ -418,11 +449,17 @@
       <h1>메홍키덜트샾이지롱</h1>
       <p>어릴 적 그 설렘 그대로, 추억을 다시 만나는 곳</p>
     </div>
-    <form class="search-box" onsubmit="return doSearch(event)">
-      <input id="searchInput" type="text" placeholder="상품을 검색해보세요" oninput="showSearchResults()" autocomplete="off">
-      <button type="submit">검색</button>
-      <div id="searchResults" class="search-results"></div>
-    </form>
+    <div class="header-right">
+      <form class="search-box" onsubmit="return doSearch(event)">
+        <input id="searchInput" type="text" placeholder="상품을 검색해보세요" oninput="showSearchResults()" autocomplete="off">
+        <button type="submit">검색</button>
+        <div id="searchResults" class="search-results"></div>
+      </form>
+      <div class="cart-icon" onclick="viewCart()" title="장바구니">
+        🛒
+        <span id="cartCount" class="cart-count">0</span>
+      </div>
+    </div>
   </header>
 
   <div class="layout">
@@ -554,6 +591,24 @@
   </footer>
 
   <script>
+    // 장바구니 수량 (localStorage로 모든 페이지에서 공유)
+    function getCartCount() {
+      return parseInt(localStorage.getItem('cartCount') || '0', 10);
+    }
+    function updateCartBadge() {
+      const el = document.getElementById('cartCount');
+      if (el) el.textContent = getCartCount();
+    }
+    function addToCart(name) {
+      localStorage.setItem('cartCount', getCartCount() + 1);
+      updateCartBadge();
+      alert(name + '를 장바구니에 담았습니다!');
+    }
+    function viewCart() {
+      alert('현재 장바구니에 담긴 상품 수: ' + getCartCount() + '개');
+    }
+    updateCartBadge();
+
     // 검색 기능
     const products = [
       { name: "고속 RC카", url: "rc.html#car" },
