@@ -339,6 +339,7 @@
       <p>어릴 적 그 설렘 그대로, 추억을 다시 만나는 곳</p>
     </div>
     <div class="header-right">
+      <div id="authStatus"></div>
       <form class="search-box" onsubmit="return doSearch(event)">
         <input id="searchInput" type="text" placeholder="상품을 검색해보세요" oninput="showSearchResults()" autocomplete="off">
         <button type="submit">검색</button>
@@ -465,6 +466,9 @@
     <p>운영시간: 평일 10:00 ~ 19:00</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="auth-ui.js"></script>
   <script src="cart.js"></script>
   <script>
     const products = [
