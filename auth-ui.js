@@ -8,9 +8,9 @@
     style.id = 'authUiStyle';
     style.textContent =
       '#authStatus{display:flex;align-items:center;gap:8px;}' +
-      '#authStatus .auth-email{font-size:13px;color:#d4af37;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}' +
+      '#authStatus .auth-email{font-size:13px;color:#ff1e1e;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}' +
       '#authStatus .auth-logout-btn{background:none;border:1px solid #555;color:#ccc;padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;}' +
-      '#authStatus .auth-logout-btn:hover{border-color:#d4af37;color:#d4af37;}';
+      '#authStatus .auth-logout-btn:hover{border-color:#ff1e1e;color:#ff1e1e;}';
     document.head.appendChild(style);
   }
 
