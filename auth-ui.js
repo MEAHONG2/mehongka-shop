@@ -17,6 +17,14 @@
   function renderLoggedOut() {
     var el = document.getElementById('authStatus');
     if (el) el.innerHTML = '';
+
+    // 상단 메뉴의 "로그인" 자리를 원래대로 되돌린다.
+    var navLink = document.getElementById('navAuthLink');
+    if (navLink) {
+      navLink.textContent = '로그인';
+      navLink.href = 'login.html';
+      navLink.removeAttribute('onclick');
+    }
   }
 
   function escapeHtml(str) {
@@ -26,13 +34,23 @@
   }
 
   function renderLoggedIn(user) {
-    var el = document.getElementById('authStatus');
-    if (!el) return;
     var name = user.user_metadata && user.user_metadata.name;
     var label = name ? (name + '님') : user.email;
-    el.innerHTML =
-      '<span class="auth-email" title="' + escapeHtml(user.email) + '">' + escapeHtml(label) + '</span>' +
-      '<button class="auth-logout-btn" onclick="handleLogout()">로그아웃</button>';
+
+    var el = document.getElementById('authStatus');
+    if (el) {
+      el.innerHTML =
+        '<span class="auth-email" title="' + escapeHtml(user.email) + '">' + escapeHtml(label) + '</span>' +
+        '<button class="auth-logout-btn" onclick="handleLogout()">로그아웃</button>';
+    }
+
+    // 상단 메뉴의 "로그인" 자리에 고객 이름을 보여준다 (클릭하면 로그아웃).
+    var navLink = document.getElementById('navAuthLink');
+    if (navLink) {
+      navLink.textContent = label;
+      navLink.href = '#';
+      navLink.setAttribute('onclick', 'handleLogout(); return false;');
+    }
   }
 
   async function refreshAuthUI() {
