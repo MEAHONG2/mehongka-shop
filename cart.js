@@ -52,6 +52,20 @@
     renderCartList();
   };
 
+  // 수량 +/- 조절 (delta: +1 또는 -1). 0 이하가 되면 자동 삭제.
+  window.changeQty = function (name, delta) {
+    var cart = getCart();
+    var item = cart.find(function (i) { return i.name === name; });
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) {
+      cart = cart.filter(function (i) { return i.name !== name; });
+    }
+    saveCart(cart);
+    updateCartBadge();
+    renderCartList();
+  };
+
   function buildModal() {
     if (document.getElementById('cartModalOverlay')) return;
 
@@ -64,6 +78,11 @@
       '#cartModal .cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #333;font-size:14px;gap:8px;}' +
       '#cartModal .cart-item .item-name{font-weight:bold;color:#fff;}' +
       '#cartModal .cart-item .item-qty{color:#aaa;font-size:12px;margin-top:3px;}' +
+      '#cartModal .cart-item .item-right{display:flex;align-items:center;gap:10px;}' +
+      '#cartModal .qty-control{display:flex;align-items:center;gap:6px;}' +
+      '#cartModal .qty-btn{width:22px;height:22px;border:1px solid #555;border-radius:5px;background:#0f0f0f;color:#d4af37;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}' +
+      '#cartModal .qty-btn:hover{border-color:#d4af37;}' +
+      '#cartModal .qty-num{min-width:18px;text-align:center;font-size:13px;color:#fff;}' +
       '#cartModal .cart-item .item-remove{background:none;border:none;color:#888;cursor:pointer;font-size:16px;padding:4px;}' +
       '#cartModal .cart-item .item-remove:hover{color:#e23b3b;}' +
       '#cartModal .cart-empty{text-align:center;color:#888;padding:30px 0;font-size:14px;}' +
@@ -105,8 +124,15 @@
       return (
         '<div class="cart-item">' +
         '<div><div class="item-name">' + item.name + '</div>' +
-        '<div class="item-qty">' + formatWon(item.price) + ' x ' + item.qty + '</div></div>' +
+        '<div class="item-qty">' + formatWon(item.price) + ' x ' + item.qty + ' = ' + formatWon(item.price * item.qty) + '</div></div>' +
+        '<div class="item-right">' +
+        '<div class="qty-control">' +
+        '<button class="qty-btn" onclick="changeQty(\'' + item.name + '\', -1)">−</button>' +
+        '<span class="qty-num">' + item.qty + '</span>' +
+        '<button class="qty-btn" onclick="changeQty(\'' + item.name + '\', 1)">+</button>' +
+        '</div>' +
         '<button class="item-remove" onclick="removeFromCart(\'' + item.name + '\')">✕</button>' +
+        '</div>' +
         '</div>'
       );
     }).join('');

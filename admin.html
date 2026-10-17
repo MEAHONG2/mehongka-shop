@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메홍키덜트샾 - 영수증 관리</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: sans-serif;
+    color: #eee;
+    background-color: #0a0a0a;
+  }
+
+  :root {
+    --gold: #d4af37;
+    --dark: #111111;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background-color: var(--dark);
+    color: white;
+    flex-wrap: wrap;
+    gap: 15px;
+    border-bottom: 1px solid var(--gold);
+  }
+  header .logo h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 26px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  header .logo p {
+    font-size: 13px;
+    margin-top: 4px;
+    color: #bbb;
+  }
+
+  .top-bar {
+    background-color: #000000;
+    padding: 8px 30px;
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  nav a:hover {
+    color: var(--gold);
+  }
+  nav li {
+    position: relative;
+  }
+  .submenu {
+    display: none;
+    list-style: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--dark);
+    border: 1px solid var(--gold);
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 100px;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+  }
+  nav li:hover .submenu {
+    display: flex;
+  }
+
+  .admin-wrap {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 0 20px 60px;
+  }
+
+  .panel {
+    background-color: #1a1a1a;
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 25px 25px 30px;
+    margin-bottom: 30px;
+  }
+  .panel h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    color: var(--gold);
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 15px;
+  }
+  .form-grid .full {
+    grid-column: 1 / -1;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    color: #bbb;
+    margin-bottom: 6px;
+  }
+  .field input {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background-color: #0f0f0f;
+    color: #eee;
+    font-size: 14px;
+  }
+  .field input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background-color: var(--gold);
+    color: #111;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  .btn-primary:hover {
+    opacity: 0.85;
+  }
+  .btn-secondary {
+    background-color: transparent;
+    color: #ccc;
+    border: 1px solid #555;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-size: 14px;
+    display: none;
+  }
+  .btn-secondary:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    align-items: flex-end;
+  }
+  .toolbar .field {
+    min-width: 160px;
+  }
+  .toolbar .field input {
+    width: 100%;
+  }
+  .toolbar button {
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th, td {
+    border-bottom: 1px solid #333;
+    padding: 10px 8px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  th {
+    background-color: #0f0f0f;
+    color: var(--gold);
+  }
+  tbody tr:hover {
+    background-color: #222;
+  }
+  .actions {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    white-space: nowrap;
+  }
+  .actions button {
+    border: none;
+    border-radius: 5px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #111;
+  }
+  .btn-edit { background-color: #d4af37; }
+  .btn-delete { background-color: #c0392b; color: #fff; }
+  .btn-print { background-color: #777; color: #fff; }
+  .btn-image { background-color: #2d6cdf; color: #fff; }
+  .actions button:hover { opacity: 0.85; }
+
+  .totals {
+    margin-top: 15px;
+    text-align: right;
+    color: #ccc;
+    font-size: 14px;
+  }
+  .totals span {
+    color: var(--gold);
+    font-weight: bold;
+  }
+
+  footer {
+    background-color: #000000;
+    color: #ccc;
+    text-align: center;
+    padding: 25px;
+    font-size: 14px;
+    border-top: 1px solid var(--gold);
+  }
+</style>
+</head>
+<body>
+
+  <!-- 상단 메뉴 바 -->
+  <div class="top-bar">
+    <nav>
+      <ul>
+        <li><a href="index.html">홈</a></li>
+        <li>
+          <a href="#">상품 ▾</a>
+          <ul class="submenu">
+            <li><a href="rc.html">RC</a></li>
+            <li><a href="plamo.html">프라모델</a></li>
+            <li><a href="figure.html">피규어</a></li>
+          </ul>
+        </li>
+        <li><a href="admin.html">관리자</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- 헤더 -->
+  <header>
+    <div class="logo">
+      <h1>메홍키덜트샾이지롱</h1>
+      <p>영수증 관리 (관리자 전용)</p>
+    </div>
+  </header>
+
+  <div class="admin-wrap">
+
+    <!-- 영수증 등록/수정 -->
+    <section class="panel">
+      <h2>영수증 등록</h2>
+      <form id="receiptForm" onsubmit="return submitReceipt(event)">
+        <div class="form-grid">
+          <div class="field">
+            <label for="f_date">주문일자 *</label>
+            <input type="date" id="f_date" required>
+          </div>
+          <div class="field">
+            <label for="f_customer">주문자명 *</label>
+            <input type="text" id="f_customer" placeholder="예: 홍길동" required>
+          </div>
+          <div class="field">
+            <label for="f_phone">연락처</label>
+            <input type="text" id="f_phone" placeholder="예: 010-1234-5678">
+          </div>
+          <div class="field">
+            <label for="f_product">상품명 *</label>
+            <input type="text" id="f_product" placeholder="예: 고속 RC카" required>
+          </div>
+          <div class="field">
+            <label for="f_qty">수량 *</label>
+            <input type="number" id="f_qty" min="1" value="1" required>
+          </div>
+          <div class="field">
+            <label for="f_price">단가(원) *</label>
+            <input type="number" id="f_price" min="0" step="100" placeholder="예: 106400" required>
+          </div>
+          <div class="field full">
+            <label for="f_memo">메모</label>
+            <input type="text" id="f_memo" placeholder="배송 메모 등">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary" id="submitBtn">영수증 등록</button>
+          <button type="button" class="btn-secondary" id="cancelBtn" onclick="cancelEdit()">취소</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 영수증 목록 -->
+    <section class="panel">
+      <h2>영수증 목록</h2>
+      <div class="toolbar">
+        <div class="field">
+          <label for="searchKeyword">검색 (주문자/상품명)</label>
+          <input type="text" id="searchKeyword" oninput="renderTable()" placeholder="검색어 입력">
+        </div>
+        <div class="field">
+          <label for="searchStart">시작일</label>
+          <input type="date" id="searchStart" onchange="renderTable()">
+        </div>
+        <div class="field">
+          <label for="searchEnd">종료일</label>
+          <input type="date" id="searchEnd" onchange="renderTable()">
+        </div>
+        <button type="button" class="btn-secondary" style="display:inline-block;" onclick="resetFilter()">필터 초기화</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>날짜</th>
+              <th>주문자</th>
+              <th>연락처</th>
+              <th>상품명</th>
+              <th>수량</th>
+              <th>단가</th>
+              <th>금액</th>
+              <th>메모</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="receiptBody"></tbody>
+        </table>
+      </div>
+
+      <div class="totals">
+        총 <span id="totalCount">0</span>건 / 합계 <span id="totalAmount">0</span>원
+      </div>
+    </section>
+
+  </div>
+
+  <!-- 인쇄/이미지 캡쳐용 숨김 영역 -->
+  <div id="receiptCapture" style="position:absolute; left:-9999px; top:0;"></div>
+
+  <!-- 푸터 -->
+  <footer>
+    <p>메홍카덜트샾 | 전화: 010-1234-5678 | 이메일: contact@mehongka.com</p>
+    <p>운영시간: 평일 10:00 ~ 19:00</p>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = 'mehong_receipts';
+    let receipts = [];
+    let editingId = null;
+
+    function load() {
+      try {
+        receipts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (e) {
+        receipts = [];
+      }
+    }
+    function persist() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(receipts));
+    }
+    function todayStr() {
+      return new Date().toISOString().slice(0, 10);
+    }
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function resetForm() {
+      document.getElementById('receiptForm').reset();
+      document.getElementById('f_date').value = todayStr();
+      document.getElementById('f_qty').value = 1;
+    }
+
+    function submitReceipt(e) {
+      e.preventDefault();
+      const date = document.getElementById('f_date').value;
+      const customer = document.getElementById('f_customer').value.trim();
+      const phone = document.getElementById('f_phone').value.trim();
+      const product = document.getElementById('f_product').value.trim();
+      const qty = parseInt(document.getElementById('f_qty').value, 10);
+      const price = parseInt(document.getElementById('f_price').value, 10);
+      const memo = document.getElementById('f_memo').value.trim();
+
+      if (!date || !customer || !product || !qty || qty < 1 || isNaN(price) || price < 0) {
+        alert('필수 항목(날짜/주문자명/상품명/수량/단가)을 올바르게 입력해주세요.');
+        return false;
+      }
+
+      if (editingId) {
+        const target = receipts.find(r => r.id === editingId);
+        if (target) {
+          Object.assign(target, { date, customer, phone, product, qty, price, memo });
+        }
+        editingId = null;
+        document.getElementById('submitBtn').textContent = '영수증 등록';
+        document.getElementById('cancelBtn').style.display = 'none';
+      } else {
+        receipts.push({ id: Date.now().toString(), date, customer, phone, product, qty, price, memo });
+      }
+
+      persist();
+      resetForm();
+      renderTable();
+      return false;
+    }
+
+    function cancelEdit() {
+      editingId = null;
+      document.getElementById('submitBtn').textContent = '영수증 등록';
+      document.getElementById('cancelBtn').style.display = 'none';
+      resetForm();
+    }
+
+    function editReceipt(id) {
+      const r = receipts.find(x => x.id === id);
+      if (!r) return;
+      editingId = id;
+      document.getElementById('f_date').value = r.date;
+      document.getElementById('f_customer').value = r.customer;
+      document.getElementById('f_phone').value = r.phone || '';
+      document.getElementById('f_product').value = r.product;
+      document.getElementById('f_qty').value = r.qty;
+      document.getElementById('f_price').value = r.price;
+      document.getElementById('f_memo').value = r.memo || '';
+      document.getElementById('submitBtn').textContent = '수정 완료';
+      document.getElementById('cancelBtn').style.display = 'inline-block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteReceipt(id) {
+      if (!confirm('이 영수증을 삭제하시겠습니까?')) return;
+      receipts = receipts.filter(r => r.id !== id);
+      persist();
+      renderTable();
+    }
+
+    function filteredReceipts() {
+      const keyword = document.getElementById('searchKeyword').value.trim();
+      const start = document.getElementById('searchStart').value;
+      const end = document.getElementById('searchEnd').value;
+      return receipts.filter(r => {
+        if (keyword && !(r.customer.includes(keyword) || r.product.includes(keyword))) return false;
+        if (start && r.date < start) return false;
+        if (end && r.date > end) return false;
+        return true;
+      });
+    }
+
+    function resetFilter() {
+      document.getElementById('searchKeyword').value = '';
+      document.getElementById('searchStart').value = '';
+      document.getElementById('searchEnd').value = '';
+      renderTable();
+    }
+
+    function renderTable() {
+      const list = filteredReceipts().slice().sort((a, b) => {
+        return b.date.localeCompare(a.date) || (Number(b.id) - Number(a.id));
+      });
+      const body = document.getElementById('receiptBody');
+      body.innerHTML = '';
+      let totalAmount = 0;
+
+      list.forEach((r, idx) => {
+        const amount = r.qty * r.price;
+        totalAmount += amount;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td>${r.date}</td>
+          <td>${escapeHtml(r.customer)}</td>
+          <td>${escapeHtml(r.phone || '-')}</td>
+          <td>${escapeHtml(r.product)}</td>
+          <td>${r.qty}</td>
+          <td>${r.price.toLocaleString()}원</td>
+          <td>${amount.toLocaleString()}원</td>
+          <td>${escapeHtml(r.memo || '-')}</td>
+          <td class="actions">
+            <button class="btn-edit" onclick="editReceipt('${r.id}')">수정</button>
+            <button class="btn-delete" onclick="deleteReceipt('${r.id}')">삭제</button>
+            <button class="btn-print" onclick="printReceipt('${r.id}')">인쇄</button>
+            <button class="btn-image" onclick="saveReceiptImage('${r.id}')">이미지</button>
+          </td>
+        `;
+        body.appendChild(tr);
+      });
+
+      if (list.length === 0) {
+        body.innerHTML = '<tr><td colspan="10" style="color:#888; padding:20px;">등록된 영수증이 없습니다.</td></tr>';
+      }
+
+      document.getElementById('totalCount').textContent = list.length;
+      document.getElementById('totalAmount').textContent = totalAmount.toLocaleString();
+    }
+
+    function buildReceiptHtml(r) {
+      const amount = r.qty * r.price;
+      return `
+        <div style="font-family:sans-serif;color:#111;width:380px;padding:30px;background:#fff;">
+          <h2 style="text-align:center;margin-bottom:4px;">메홍키덜트샾</h2>
+          <p style="text-align:center;color:#555;margin-bottom:20px;">영 수 증</p>
+          <table style="width:100%;border-collapse:collapse;font-size:14px;">
+            <tr><th style="text-align:left;border:1px solid #ccc;padding:6px;background:#f5f5f5;width:90px;">주문일자</th><td style="border:1px solid #ccc;padding:6px;">${r.date}</td></tr>
+            <tr><th style="text-align:left;border:1px solid #ccc;padding:6px;background:#f5f5f5;">주문자</th><td style="border:1px solid #ccc;padding:6px;">${escapeHtml(r.customer)}</td></tr>
+            <tr><th style="text-align:left;border:1px solid #ccc;padding:6px;background:#f5f5f5;">연락처</th><td style="border:1px solid #ccc;padding:6px;">${escapeHtml(r.phone || '-')}</td></tr>
+            <tr><th style="text-align:left;border:1px solid #ccc;padding:6px;background:#f5f5f5;">상품명</th><td style="border:1px solid #ccc;padding:6px;">${escapeHtml(r.product)}</td></tr>
+            <tr><th style="text-align:left;border:1px solid #ccc;padding:6px;background:#f5f5f5;">수량</th><td style="border:1px solid #ccc;padding:6px;">${r.qty}</td></tr>
+            <tr><th style="text-align:left;border:1px solid #ccc;padding:6px;background:#f5f5f5;">단가</th><td style="border:1px solid #ccc;padding:6px;">${r.price.toLocaleString()}원</td></tr>
+            <tr><th style="text-align:left;border:1px solid #ccc;padding:6px;background:#f5f5f5;">메모</th><td style="border:1px solid #ccc;padding:6px;">${escapeHtml(r.memo || '-')}</td></tr>
+          </table>
+          <p style="text-align:right;font-weight:bold;font-size:18px;margin-top:16px;">합계: ${amount.toLocaleString()}원</p>
+          <p style="text-align:center;color:#999;font-size:12px;margin-top:20px;">발행일: ${todayStr()}</p>
+        </div>
+      `;
+    }
+
+    function printReceipt(id) {
+      const r = receipts.find(x => x.id === id);
+      if (!r) return;
+      const win = window.open('', '_blank', 'width=460,height=640');
+      if (!win) {
+        alert('팝업이 차단되었습니다. 팝업 차단을 해제해주세요.');
+        return;
+      }
+      win.document.write(`<html><head><title>영수증 - ${escapeHtml(r.customer)}</title></head><body>${buildReceiptHtml(r)}</body></html>`);
+      win.document.close();
+      win.focus();
+      setTimeout(() => win.print(), 300);
+    }
+
+    function saveReceiptImage(id) {
+      const r = receipts.find(x => x.id === id);
+      if (!r) return;
+      if (typeof html2canvas === 'undefined') {
+        alert('이미지 저장 기능을 불러오지 못했습니다. 인터넷 연결을 확인해주세요.');
+        return;
+      }
+      const area = document.getElementById('receiptCapture');
+      area.innerHTML = buildReceiptHtml(r);
+      html2canvas(area.firstElementChild).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `영수증_${r.customer}_${r.date}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        area.innerHTML = '';
+      });
+    }
+
+    // 초기화
+    load();
+    resetForm();
+    renderTable();
+  </script>
+
+</body>
+</html>
