@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>메홍키덜트샾 - 주문/결제</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: sans-serif; color:#eee; background-color:#0a0a0a; }
+  :root { --gold:#ff1e1e; --dark:#111111; }
+
+  .top-bar { background-color:#000; padding:8px 30px; }
+  nav ul { list-style:none; display:flex; gap:20px; }
+  nav a { color:white; text-decoration:none; font-weight:bold; }
+  nav a:hover { color:var(--gold); }
+  nav li { position:relative; }
+  .submenu { display:none; list-style:none; position:absolute; top:100%; left:0; background-color:var(--dark); border:1px solid var(--gold); padding:10px; border-radius:8px; min-width:100px; flex-direction:column; gap:10px; z-index:10; }
+  nav li:hover .submenu { display:flex; }
+
+  header { display:flex; justify-content:space-between; align-items:center; padding:20px 30px; background-color:var(--dark); color:white; flex-wrap:wrap; gap:15px; border-bottom:1px solid var(--gold); }
+  header .logo h1 { font-family:'Nanum Myeongjo', serif; font-size:26px; color:var(--gold); letter-spacing:1px; }
+  header .logo p { font-size:13px; margin-top:4px; color:#bbb; }
+  #authStatus { display:flex; align-items:center; gap:8px; }
+
+  .wrap { max-width:860px; margin:0 auto; padding:40px 20px 70px; }
+
+  .steps { display:flex; justify-content:center; align-items:center; gap:18px; margin-bottom:40px; flex-wrap:wrap; }
+  .step { text-align:center; color:#666; }
+  .step .num { font-size:26px; font-weight:800; }
+  .step .label { font-size:13px; margin-top:4px; }
+  .step.active { color:var(--gold); }
+  .step-arrow { color:#444; font-size:20px; }
+
+  .panel { background-color:#1a1a1a; border:1px solid #2a2a2a; border-radius:12px; padding:26px; margin-bottom:24px; }
+  .panel h2 { font-family:'Nanum Myeongjo', serif; color:var(--gold); font-size:19px; margin-bottom:20px; }
+
+  .field { margin-bottom:16px; }
+  .field label { display:block; font-size:13px; color:#bbb; margin-bottom:6px; }
+  .field input, .field textarea { width:100%; padding:10px 12px; border:1px solid #333; border-radius:6px; background-color:#0f0f0f; color:#eee; font-size:14px; font-family:inherit; }
+  .field input:focus, .field textarea:focus { outline:none; border-color:var(--gold); }
+  .field textarea { resize:vertical; min-height:60px; }
+
+  .order-list { list-style:none; }
+  .order-list li { display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #262626; font-size:14px; }
+  .order-list li:last-child { border-bottom:none; }
+  .order-list .oi-name { color:#fff; font-weight:bold; }
+  .order-list .oi-sub { color:#999; font-size:12px; margin-top:3px; }
+
+  .summary-detail { font-size:14px; color:#ccc; margin-top:14px; }
+  .summary-detail div { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #222; }
+  .summary-detail .grand { font-weight:bold; color:var(--gold); font-size:18px; border-bottom:none; border-top:1px dashed #444; margin-top:6px; padding-top:12px; }
+
+  .pay-methods { display:flex; gap:10px; flex-wrap:wrap; }
+  .pay-methods label { flex:1; min-width:140px; border:1px solid #333; border-radius:8px; padding:14px; text-align:center; cursor:pointer; font-size:14px; color:#ccc; }
+  .pay-methods input { display:none; }
+  .pay-methods input:checked + span { color:var(--gold); font-weight:bold; }
+  .pay-methods label:has(input:checked) { border-color:var(--gold); background-color:#201212; }
+  .demo-note { margin-top:14px; font-size:12px; color:#888; line-height:1.6; border-top:1px dashed #333; padding-top:12px; }
+
+  .submit-btn { width:100%; margin-top:10px; background-color:var(--gold); color:#111; border:none; padding:15px; border-radius:8px; font-weight:bold; font-size:16px; cursor:pointer; }
+  .submit-btn:hover { opacity:0.88; }
+  .submit-btn:disabled { opacity:0.5; cursor:not-allowed; }
+
+  .empty-notice { text-align:center; color:#888; padding:60px 20px; }
+  .empty-notice a { color:var(--gold); }
+
+  /* 완료 화면 */
+  .done-wrap { text-align:center; padding:50px 20px; }
+  .done-wrap .check { font-size:60px; margin-bottom:16px; }
+  .done-wrap h2 { font-family:'Nanum Myeongjo', serif; color:var(--gold); font-size:26px; margin-bottom:10px; }
+  .done-wrap p { color:#ccc; margin-bottom:6px; }
+  .done-id { color:#888; font-size:13px; margin-bottom:28px; }
+  .done-actions { display:flex; justify-content:center; gap:12px; margin-top:20px; flex-wrap:wrap; }
+  .done-actions button { padding:12px 28px; border-radius:8px; font-weight:bold; cursor:pointer; border:1px solid var(--gold); background:var(--gold); color:#111; }
+
+  footer { background-color:#000; color:#ccc; text-align:center; padding:25px; font-size:14px; border-top:1px solid var(--gold); }
+</style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <nav>
+      <ul>
+        <li><a href="index.html">홈</a></li>
+        <li>
+          <a href="#">상품 ▾</a>
+          <ul class="submenu">
+            <li><a href="rc.html">RC</a></li>
+            <li><a href="plamo.html">프라모델</a></li>
+            <li><a href="figure.html">피규어</a></li>
+          </ul>
+        </li>
+        <li><a href="login.html">로그인</a></li>
+        <li><a href="admin.html">관리자</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <header>
+    <div class="logo">
+      <h1>메홍키덜트샾이지롱</h1>
+      <p>어릴 적 그 설렘 그대로, 추억을 다시 만나는 곳</p>
+    </div>
+    <div id="authStatus"></div>
+  </header>
+
+  <div class="wrap">
+
+    <div class="steps">
+      <div class="step" id="stepIndicator1">
+        <div class="num">01</div>
+        <div class="label">장바구니 상품확인</div>
+      </div>
+      <div class="step-arrow">›</div>
+      <div class="step active" id="stepIndicator2">
+        <div class="num">02</div>
+        <div class="label">주문서작성</div>
+      </div>
+      <div class="step-arrow">›</div>
+      <div class="step" id="stepIndicator3">
+        <div class="num">03</div>
+        <div class="label">주문서확인</div>
+      </div>
+    </div>
+
+    <div id="checkoutBody"></div>
+
+  </div>
+
+  <footer>
+    <p>메홍카덜트샾 | 전화: 010-1234-5678 | 이메일: contact@mehongka.com</p>
+    <p>운영시간: 평일 10:00 ~ 19:00</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="auth-ui.js"></script>
+  <script src="cart.js"></script>
+  <script>
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+    }
+
+    async function renderCheckout() {
+      const cart = await getCart();
+      const body = document.getElementById('checkoutBody');
+
+      if (cart.length === 0) {
+        body.innerHTML =
+          '<div class="empty-notice">장바구니가 비어 있습니다. <a href="index.html">쇼핑하러 가기</a></div>';
+        return;
+      }
+
+      const productTotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const shipping = productTotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+      const grandTotal = productTotal + shipping;
+
+      const itemsHtml = cart.map(i =>
+        '<li><div><div class="oi-name">' + escapeHtml(i.name) + '</div>' +
+        '<div class="oi-sub">' + formatWon(i.price) + ' x ' + i.qty + '</div></div>' +
+        '<div>' + formatWon(i.price * i.qty) + '</div></li>'
+      ).join('');
+
+      body.innerHTML =
+        '<form id="checkoutForm" onsubmit="return submitOrder(event)">' +
+        '<div class="panel">' +
+        '<h2>배송 정보</h2>' +
+        '<div class="field"><label for="co_name">받는 사람 이름 *</label>' +
+        '<input type="text" id="co_name" placeholder="예: 홍길동" required></div>' +
+        '<div class="field"><label for="co_phone">연락처 *</label>' +
+        '<input type="text" id="co_phone" placeholder="예: 010-1234-5678" required></div>' +
+        '<div class="field"><label for="co_address">배송 주소 *</label>' +
+        '<input type="text" id="co_address" placeholder="예: 서울시 OO구 OO로 12길 3, 101동 101호" required></div>' +
+        '<div class="field"><label for="co_memo">배송 메모</label>' +
+        '<textarea id="co_memo" placeholder="부재 시 문 앞에 놔주세요 등 (선택)"></textarea></div>' +
+        '</div>' +
+
+        '<div class="panel">' +
+        '<h2>주문 상품</h2>' +
+        '<ul class="order-list">' + itemsHtml + '</ul>' +
+        '<div class="summary-detail">' +
+        '<div><span>상품 합계</span><span>' + formatWon(productTotal) + '</span></div>' +
+        '<div><span>배송비</span><span>' + (shipping === 0 ? '무료' : formatWon(shipping)) + '</span></div>' +
+        '<div class="grand"><span>총 결제금액</span><span>' + formatWon(grandTotal) + '</span></div>' +
+        '</div>' +
+        '</div>' +
+
+        '<div class="panel">' +
+        '<h2>결제 수단</h2>' +
+        '<div class="pay-methods">' +
+        '<label><input type="radio" name="payMethod" value="card" checked><span>💳 신용카드</span></label>' +
+        '<label><input type="radio" name="payMethod" value="bank"><span>🏦 무통장입금</span></label>' +
+        '<label><input type="radio" name="payMethod" value="kakao"><span>🟡 카카오페이</span></label>' +
+        '</div>' +
+        '<div class="demo-note">⚠️ 이 사이트는 데모 쇼핑몰이라 실제 결제 대행사(PG)가 연결되어 있지 않습니다. "결제하기"를 누르면 실제 돈은 빠져나가지 않고, 주문 내역만 저장되는 모의(데모) 결제로 처리됩니다.</div>' +
+        '</div>' +
+
+        '<button type="submit" class="submit-btn" id="payBtn">' + formatWon(grandTotal) + ' 결제하기</button>' +
+        '</form>';
+    }
+
+    async function submitOrder(e) {
+      e.preventDefault();
+      const btn = document.getElementById('payBtn');
+      const name = document.getElementById('co_name').value.trim();
+      const phone = document.getElementById('co_phone').value.trim();
+      const address = document.getElementById('co_address').value.trim();
+      const memo = document.getElementById('co_memo').value.trim();
+
+      if (!name || !phone || !address) {
+        alert('받는 사람 이름, 연락처, 주소를 모두 입력해주세요.');
+        return false;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '결제 처리 중...';
+
+      const cart = await getCart();
+      const productTotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const shipping = productTotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_FEE;
+      const grandTotal = productTotal + shipping;
+
+      const { data: sessionData } = await supabaseClient.auth.getSession();
+      const uid = (sessionData && sessionData.session && sessionData.session.user) ? sessionData.session.user.id : null;
+
+      const payload = {
+        user_id: uid,
+        items: cart,
+        product_total: productTotal,
+        shipping_fee: shipping,
+        grand_total: grandTotal,
+        recipient_name: name,
+        phone: phone,
+        address: address,
+        memo: memo || null,
+        status: 'placed'
+      };
+
+      // 데모 결제 처리 연출 (실제 PG 연동 없음)
+      await new Promise(r => setTimeout(r, 900));
+
+      // 비로그인(게스트) 주문은 본인 것만 조회 가능한 RLS 정책상 저장 직후 다시 읽어올 수
+      // 없으므로(다른 손님 주문이 노출되지 않도록 하는 안전장치), 주문 완료 화면에는
+      // 서버에서 되읽지 않고 이 자리에서 만든 주문번호를 보여준다. 로그인 사용자는
+      // 이후 "내 주문내역" 기능에서 실제 주문을 조회할 수 있다.
+      const { error } = await supabaseClient.from('orders').insert(payload);
+
+      if (error) {
+        alert('주문 처리 중 오류가 발생했습니다: ' + error.message);
+        btn.disabled = false;
+        btn.textContent = formatWon(grandTotal) + ' 결제하기';
+        return false;
+      }
+
+      await clearCart();
+      renderOrderComplete(payload);
+      return false;
+    }
+
+    function renderOrderComplete(payload) {
+      document.getElementById('stepIndicator2').classList.remove('active');
+      document.getElementById('stepIndicator3').classList.add('active');
+
+      const orderNo = '#' + Date.now().toString().slice(-8);
+      const body = document.getElementById('checkoutBody');
+      body.innerHTML =
+        '<div class="panel done-wrap">' +
+        '<div class="check">✅</div>' +
+        '<h2>주문이 완료되었습니다!</h2>' +
+        '<p>' + escapeHtml(payload.recipient_name) + '님께 ' + escapeHtml(payload.address) + ' 주소로 배송해드릴게요.</p>' +
+        '<p>총 결제금액: <strong style="color:#ff1e1e;">' + formatWon(payload.grand_total) + '</strong></p>' +
+        '<div class="done-id">주문번호 ' + orderNo + ' · 연락처 ' + escapeHtml(payload.phone) + '</div>' +
+        '<div class="done-actions">' +
+        '<button onclick="location.href=\'index.html\'">쇼핑 계속하기</button>' +
+        '</div>' +
+        '</div>';
+    }
+
+    renderCheckout();
+  </script>
+
+</body>
+</html>
