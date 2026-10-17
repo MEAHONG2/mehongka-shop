@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>미리보기 B - 레이싱 스트라이프</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', sans-serif; background:#000; color:#fff; }
+  :root { --red:#ff1e1e; }
+
+  .top-bar { background:#111; padding:10px 40px; }
+  .top-bar nav ul { list-style:none; display:flex; gap:26px; }
+  .top-bar a { color:#ccc; text-decoration:none; font-size:13px; font-weight:700; text-transform:uppercase; }
+  .top-bar a:hover { color:var(--red); }
+
+  header {
+    position:relative; overflow:hidden;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:26px 40px; background:#0d0d0d;
+    border-bottom:3px solid var(--red);
+  }
+  header::before {
+    content:''; position:absolute; top:0; right:-60px; width:220px; height:200%;
+    background:repeating-linear-gradient(135deg, var(--red) 0 14px, transparent 14px 28px);
+    opacity:.18; transform:rotate(0deg);
+  }
+  header h1 { font-size:24px; font-weight:900; letter-spacing:1px; font-style:italic; position:relative; }
+  header h1 span { color:var(--red); }
+  header p { font-size:12px; color:#999; margin-top:4px; position:relative; }
+  .hright { display:flex; align-items:center; gap:18px; position:relative; }
+  .search { padding:9px 14px; background:#1a1a1a; border:1px solid var(--red); border-radius:3px; color:#eee; width:180px; font-size:13px; }
+  .cart { font-size:22px; position:relative; cursor:pointer; }
+  .cart .badge { position:absolute; top:-6px; right:-10px; background:var(--red); color:#fff; font-size:10px; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+
+  .hero {
+    padding:80px 40px; text-align:center; position:relative;
+    background: linear-gradient(180deg, #0d0d0d 0%, #000 100%);
+  }
+  .hero .stripe { width:70px; height:6px; background:var(--red); margin:0 auto 24px; transform:skewX(-20deg); }
+  .hero h2 { font-size:46px; font-weight:900; font-style:italic; letter-spacing:-1px; margin-bottom:14px; }
+  .hero h2 em { color:var(--red); font-style:italic; }
+  .hero p { color:#aaa; font-size:15px; margin-bottom:28px; }
+  .hero button {
+    background:var(--red); color:#fff; border:none; padding:15px 38px;
+    font-weight:800; font-size:14px; letter-spacing:1px; cursor:pointer;
+    clip-path: polygon(6% 0, 100% 0, 94% 100%, 0% 100%);
+  }
+  .hero button:hover { background:#d10000; }
+
+  .cats { display:flex; gap:14px; padding:0 40px 60px; }
+  .cat {
+    flex:1; background:#0d0d0d; border:1px solid #222; border-top:3px solid var(--red);
+    padding:40px 18px; text-align:center; transition:.2s;
+  }
+  .cat:hover { border-top-color:#fff; transform:translateY(-4px); }
+  .cat .ico { font-size:32px; margin-bottom:12px; }
+  .cat h3 { font-size:16px; font-weight:800; margin-bottom:6px; }
+  .cat p { font-size:12px; color:#888; }
+
+  footer { text-align:center; padding:28px; color:#555; font-size:12px; border-top:1px solid #1a1a1a; }
+</style>
+</head>
+<body>
+  <div class="top-bar">
+    <nav><ul>
+      <li><a href="#">홈</a></li><li><a href="#">RC</a></li><li><a href="#">프라모델</a></li><li><a href="#">피규어</a></li><li><a href="#">로그인</a></li>
+    </ul></nav>
+  </div>
+  <header>
+    <div>
+      <h1>메홍<span>키덜트</span>샾</h1>
+      <p>어릴 적 그 설렘 그대로</p>
+    </div>
+    <div class="hright">
+      <input class="search" placeholder="상품 검색">
+      <div class="cart">🛒<span class="badge">3</span></div>
+    </div>
+  </header>
+  <section class="hero">
+    <div class="stripe"></div>
+    <h2>나만의 <em>취미</em>를 시작하세요</h2>
+    <p>RC · 프라모델 · 피규어, 온 가족이 즐기는 취미템</p>
+    <button>둘러보기</button>
+  </section>
+  <div class="cats">
+    <div class="cat"><div class="ico">🚗</div><h3>RC</h3><p>고속 RC카 · 드론 · 보트</p></div>
+    <div class="cat"><div class="ico">🤖</div><h3>프라모델</h3><p>건담 · 전투기 · 전함</p></div>
+    <div class="cat"><div class="ico">🦸</div><h3>피규어</h3><p>히어로 · 동물 · 우주인</p></div>
+  </div>
+  <footer>메홍키덜트샾 | 전화: 010-1234-5678</footer>
+</body>
+</html>
